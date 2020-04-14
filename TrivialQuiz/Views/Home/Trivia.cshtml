@@ -1,0 +1,69 @@
+﻿@using TrivialQuiz.Models;
+@model TriviaQuestion
+@{
+    ViewBag.Title = "Main";
+}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#"></a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav">
+            <li class="nav-item active">
+                @Html.ActionLink("Create Trivia", "Main", "Home", new { @class = "nav-link" })
+            </li>
+            <li class="nav-item">
+                @Html.ActionLink("Answer Trivia", "Trivia", "Home", new { @class = "nav-link" })
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div style="float:right">
+    <ul class="navbar-nav">
+        <li class="nav-item active">
+            @Html.ActionLink("Log off", "LogOff", "Home", routeValues: null, htmlAttributes: new { id = "" })
+        </li>
+
+    </ul>
+</div>
+<div style="float:right;margin-right:50px">
+    <label style="font-style:italic" class="alert alert-info">Logged in as - @Session["UserName"] </label><br />
+    <label style="font-style:italic" class="alert alert-info">Current points =><b class="alert alert-info"> @ViewBag.Score</b></label><br/>
+    
+</div>
+<div style="width:400px" class="alert alert-warning">
+    @ViewBag.Message
+</div>
+<div class="container">
+    <h4 class="title">Play Trivia </h4>
+    
+        @using (Html.BeginForm("TriviaQuestion", "Home", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.HiddenFor(m => m.CorrectAnswer)
+            @Html.HiddenFor(m => m.QuestionID)
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+            <div class="form-group @ViewBag.ShowNextButton">
+                @*@Html.DropDownListFor(m => m.selectedTags, (IEnumerable<SelectListItem>)ViewData["ListItems"], "- Select Any -", new { @class = "form-control" })*@
+                <label for="QuestionText">@Model.QuestionText</label>
+                @Html.TextBoxFor(m=>m.Answer, new { @class = "form-control",placeholder="Enter your answer" })
+            </div>
+           
+            <div class="card-footer">
+                <input type="submit" value="Next" class="btn btn-info @ViewBag.ShowNextButton" />
+                <p>
+                Please   @Html.ActionLink("click here to Reset", "Reset", "Home", routeValues: null, htmlAttributes: new { id = "" })
+                </p>
+
+            </div>
+        }
+</div>
+<script>
+    function resetValues()
+    {
+        var reset = document.getElementById("reset");
+        reset.setAttribute('href', "@Url.Action("Reset", "Home")");
+
+    }
+</script>
+
+
+
